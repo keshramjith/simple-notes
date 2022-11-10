@@ -1,11 +1,7 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
-
-interface NoteForm {
-  title: string;
-  description: string;
-}
+import NoteForm from "../../types/NoteForm";
 
 const CreatePage = () => {
   const { register, handleSubmit } = useForm<NoteForm>();

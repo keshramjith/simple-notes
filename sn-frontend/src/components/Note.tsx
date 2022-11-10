@@ -1,6 +1,16 @@
+import { useNavigate } from "react-router-dom";
+
 import Note from "../types/Note";
 
 const NoteComponent = ({ id, title, description }: Note): JSX.Element => {
+  const navigate = useNavigate();
+
+  const deleteNote = async (id: number) => {
+    await fetch(`http://localhost:8080/notes/${id}`, {
+      method: "DELETE",
+    });
+  };
+
   return (
     <div
       style={{
@@ -19,8 +29,8 @@ const NoteComponent = ({ id, title, description }: Note): JSX.Element => {
         <div>{description}</div>
       </div>
       <div>
-        <button onClick={() => console.log(`move to /${id}`)}>Edit</button>
-        <button>Delete</button>
+        <button onClick={() => navigate(`/edit/${id}`)}>Edit</button>
+        <button onClick={() => deleteNote(id)}>Delete</button>
       </div>
     </div>
   );

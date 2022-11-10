@@ -4,6 +4,7 @@ import "./index.css";
 import App from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreatePage from "./components/pages/Create";
+import EditPage from "./components/pages/Edit";
 
 const router = createBrowserRouter([
   {
@@ -13,6 +14,10 @@ const router = createBrowserRouter([
   {
     path: "/create",
     element: <CreatePage />,
+  },
+  {
+    path: "/edit/:id",
+    element: <EditPage />,
   },
 ]);
 

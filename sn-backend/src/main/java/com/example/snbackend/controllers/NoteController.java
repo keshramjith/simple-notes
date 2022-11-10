@@ -29,13 +29,20 @@ public class NoteController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Note> getNote(@RequestParam Long id) {
-        Optional<Note> foundNote = noteRepository.findById(id);
-        if (foundNote.isPresent()) {
-            return new ResponseEntity<>(foundNote.get(), HttpStatus.OK);
-        }
-        else {
-            return new ResponseEntity<>(new Note(), HttpStatus.NOT_FOUND);
-        }
+    public ResponseEntity<Optional<Note>> getNote(@PathVariable Long id) {
+        return new ResponseEntity<>(noteRepository.findById(id), HttpStatus.OK);
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<Note> putNote(@PathVariable Long id, @RequestBody Note note) {
+        return (noteRepository.existsById(id)) ?
+                new ResponseEntity<>(noteRepository.save(note), HttpStatus.OK) :
+                new ResponseEntity<>(noteRepository.save(note), HttpStatus.CREATED);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteNote(@PathVariable Long id) {
+        noteRepository.deleteById(id);
+        return ResponseEntity.noContent().build();
     }
 }
