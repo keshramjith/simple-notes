@@ -21,7 +21,9 @@ const App = () => {
   return (
     <div className="App">
       <h1>List of notes</h1>
-      <button onClick={() => navigate("/create")}>Create a note</button>
+      <div style={{ marginBottom: "1rem" }}>
+        <button onClick={() => navigate("/create")}>Create a note</button>
+      </div>
       {notes.map(({ id, title, description }) => (
         <NoteComponent
           key={id}

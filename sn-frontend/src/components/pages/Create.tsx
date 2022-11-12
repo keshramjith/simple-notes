@@ -35,7 +35,7 @@ const CreatePage = () => {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label>
             Title:
-            <input {...register("title")} />
+            <input {...register("title", { required: true })} />
           </label>
           <label>
             Description:

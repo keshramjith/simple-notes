@@ -5,6 +5,7 @@ import App, { loader as rootLoader } from "./App";
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import CreatePage from "./components/pages/Create";
 import EditPage from "./components/pages/Edit";
+import { action as deleteAction } from "./components/pages/Delete";
 
 const router = createBrowserRouter([
   {
@@ -19,6 +20,10 @@ const router = createBrowserRouter([
   {
     path: "/edit/:id",
     element: <EditPage />,
+  },
+  {
+    path: "/delete/:id",
+    action: deleteAction,
   },
 ]);
 

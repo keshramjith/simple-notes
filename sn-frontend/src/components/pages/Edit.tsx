@@ -48,7 +48,10 @@ const EditPage = () => {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label>
             Title:
-            <input defaultValue={title} {...register("title")} />
+            <input
+              defaultValue={title}
+              {...register("title", { required: true })}
+            />
           </label>
           <label>
             Description:
