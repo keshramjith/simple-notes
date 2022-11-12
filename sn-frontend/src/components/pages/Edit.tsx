@@ -1,26 +1,28 @@
-import React, { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import {
+  LoaderFunction,
+  useLoaderData,
+  useNavigate,
+  useParams,
+} from "react-router-dom";
 import { useForm } from "react-hook-form";
 
 import NoteForm from "../../types/NoteForm";
+import Note from "../../types/Note";
+
+export const loader: LoaderFunction = async ({ request, params }) => {
+  const { id } = params;
+  const resp = await fetch(`http://localhost:8080/notes/${id}`);
+  const fetchedNote = await resp.json();
+  return { fetchedNote };
+};
 
 const EditPage = () => {
-  const [title, setTitle] = useState("");
-  const [description, setDescription] = useState("");
+  const { fetchedNote } = useLoaderData() as { fetchedNote: Note };
+  const { title, description } = fetchedNote;
+
   const { id } = useParams();
   const { register, handleSubmit } = useForm<NoteForm>();
   const navigate = useNavigate();
-
-  useEffect(() => {
-    const fetchNote = async (id: string) => {
-      const resp = await fetch(`http://localhost:8080/notes/${id}`);
-      const fetchedNote = await resp.json();
-      const { title, description } = fetchedNote;
-      setTitle(title);
-      setDescription(description);
-    };
-    id && fetchNote(id);
-  }, []);
 
   const editNote = async (formData: NoteForm) => {
     const resp = await fetch(`http://localhost:8080/notes/${id}`, {
