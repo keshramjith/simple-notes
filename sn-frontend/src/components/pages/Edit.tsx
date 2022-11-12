@@ -23,9 +23,9 @@ const EditPage = () => {
   }, []);
 
   const editNote = async (formData: NoteForm) => {
-    const resp = await fetch("http://localhost:8080/notes", {
+    const resp = await fetch(`http://localhost:8080/notes/${id}`, {
       method: "PUT",
-      body: JSON.stringify({ id, formData }),
+      body: JSON.stringify({ id, ...formData }),
       headers: {
         "Content-Type": "application/json",
       },
@@ -48,11 +48,11 @@ const EditPage = () => {
         <div style={{ display: "flex", flexDirection: "column" }}>
           <label>
             Title:
-            <input value={title} {...register("title")} />
+            <input defaultValue={title} {...register("title")} />
           </label>
           <label>
             Description:
-            <input value={description} {...register("description")} />
+            <input defaultValue={description} {...register("description")} />
           </label>
           <button type="submit">Submit</button>
         </div>

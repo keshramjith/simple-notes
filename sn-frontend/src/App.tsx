@@ -1,22 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLoaderData } from "react-router-dom";
 
 import "./App.css";
 import NoteComponent from "./components/Note";
 import Note from "./types/Note";
 
-const App = () => {
-  const [notes, setNotes] = useState<Note[]>([]);
-  const navigate = useNavigate();
+interface NotePromise {
+  notes: Note[];
+}
 
-  useEffect(() => {
-    const fetchNotes = async () => {
-      const resp = await fetch("http://localhost:8080/notes");
-      const notes: Note[] = await resp.json();
-      setNotes(notes);
-    };
-    fetchNotes();
-  }, []);
+export const loader = async (): Promise<NotePromise> => {
+  const resp = await fetch("http://localhost:8080/notes");
+  const notes: Note[] = await resp.json();
+  return { notes };
+};
+
+const App = () => {
+  const { notes } = useLoaderData() as NotePromise;
+  const navigate = useNavigate();
 
   return (
     <div className="App">
