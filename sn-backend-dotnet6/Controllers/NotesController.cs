@@ -1,10 +1,11 @@
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Http;
 using sn_backend_dotnet6.Models;
 
 namespace sn_backend_dotnet6.Controllers;
 
 [ApiController]
-[Route("[controller]")]
+[Route("notes")]
 public class NotesController {
 
   private readonly NoteContext context;
@@ -14,20 +15,33 @@ public class NotesController {
     this.context = context;
   }
 
+  [HttpDelete("{id}")]
+  public async Task<ActionResult> deleteNote(long id)
+  {
+    Note? note = await context.Notes.FindAsync(id);
+    if (note == null)
+    {
+      return new NotFoundResult();
+    }
+    context.Notes.Remove(note);
+    await context.SaveChangesAsync();
+    return new NoContentResult();
+  }
+
   [HttpGet("{id}")]
   public async Task<ActionResult<Note>> GetNote(long id)
   {
-    var Note = await context.Notes.FindAsync(id);
-    if (Note == null) 
+    var note = await context.Notes.FindAsync(id);
+    if (note == null) 
     {
-      return new Note();
+      return new NotFoundResult();
     }
-    return Note;
+    return note;
   }
 
-  // [HttpGet]
-  // public async Task<ActionResult<Note>> hello() {
-  //   var foundNotes = await _noteContext.
-  //   return foundNotes;
-  // }
+  [HttpGet]
+  public List<Note> GetAllNotes() {
+    var foundNotes = context.Notes.ToList();
+    return foundNotes;
+  }
 }
