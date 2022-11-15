@@ -1,16 +1,15 @@
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Http;
 using sn_backend_dotnet6.Models;
 
 namespace sn_backend_dotnet6.Controllers;
 
 [ApiController]
-[Route("notes")]
-public class NotesController {
+[Route("[controller]")]
+public class NotesController : ControllerBase {
 
-  private readonly NoteContext context;
+  private readonly PostgresContext context;
 
-  public NotesController(NoteContext context)
+  public NotesController(PostgresContext context)
   {
     this.context = context;
   }
@@ -21,11 +20,33 @@ public class NotesController {
     Note? note = await context.Notes.FindAsync(id);
     if (note == null)
     {
-      return new NotFoundResult();
+      return NotFound();
     }
     context.Notes.Remove(note);
     await context.SaveChangesAsync();
-    return new NoContentResult();
+    return NoContent();
+  }
+
+  [HttpPut("{id}")]
+  public async Task<ActionResult> UpdateNote(Note note)
+  {
+    var NoteFromDB = await context.Notes.FindAsync(note.Id);
+    if (NoteFromDB == null)
+    {
+      return NotFound();
+    }
+    NoteFromDB.Title = note.Title;
+    NoteFromDB.Description = note.Description;
+    await context.SaveChangesAsync();
+    return Ok();
+  }
+
+  [HttpPost]
+  public async Task<ActionResult<Note>> CreateNote(Note note)
+  {
+    context.Notes.Add(note);
+    await context.SaveChangesAsync();
+    return Ok(note);
   }
 
   [HttpGet("{id}")]
@@ -34,9 +55,9 @@ public class NotesController {
     var note = await context.Notes.FindAsync(id);
     if (note == null) 
     {
-      return new NotFoundResult();
+      return NotFound();
     }
-    return note;
+    return Ok(note);
   }
 
   [HttpGet]

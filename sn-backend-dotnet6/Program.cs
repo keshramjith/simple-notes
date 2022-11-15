@@ -10,7 +10,7 @@ builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
-builder.Services.AddDbContext<NoteContext>(opt => opt.UseNpgsql());
+builder.Services.AddDbContext<PostgresContext>(opt => opt.UseNpgsql());
 builder.Services.AddCors(options =>
 {
   options.AddPolicy(name: policyName,
@@ -18,7 +18,8 @@ builder.Services.AddCors(options =>
     {
       builder
         .WithOrigins("http://localhost:3000")
-        .WithMethods("GET", "DELETE", "POST");
+        .AllowAnyHeader()
+        .AllowAnyMethod();
     });
 });
 
